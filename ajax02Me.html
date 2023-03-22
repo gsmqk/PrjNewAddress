@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insert title here</title>
+<link rel="shortcut icon" href="images/favicon.ico">
+<style></style>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+ window.onload = function() {
+	 const btnGetDataEl = document.getElementById('btnGetData');
+	 const div1El       = document.getElementById('div1');
+	 btnGetDataEl.addEventListener('click', function() {
+		 //alert('okay');
+		 const xhr = new XMLHttpRequest();
+		 
+		 // 상태 변화 이벤트 작성
+		 // 데이터 전송상태가 변할 때
+		 // 0 : new XMLHttpRequest()
+		 // 1 : open
+		 // 2 : send
+		 // 3 : 첫번째 data가 도착했어요
+		 // 4 : 모든 데이터가 도착했어요
+		 
+		 xhr.onreadystatechange = function() {
+			 //alert( xhr.readyState );
+			 if( xhr.readytState == 4){
+				 if( xhr.status == 200 ) { //  data ok
+					 alert(xhr.status);
+					 let result     = xhr.responseText;
+					 let data       = JSON.parse(result);
+					 //console.log(typeof result + ',' + typeof data);
+					 console.log(data);
+					 let html = '<ul>';
+					 html    += '<li>id:'            + data.data.id            + '</li>';
+					 html    += '<li>name:'          + data.data.name          + '</li>';
+					 html    += '<li>year:'          + data.data.year          + '</li>';
+					 html    += '<li>color:'         + data.data.color         + '</li>';
+					 html    += '<li>pantone_value:' + data.data.pantone_value + '</li>';
+					 html    += '</ul>';
+				 	 div1El.innerHTML = html;
+				 	 
+				 } else {
+					 alert( 'Error: ' + xhr.status );
+				 }
+				 
+			 }
+		 }
+		 
+		 let   loc = 'https://reqres.in/api/product/4';
+		 
+		 xhr.open('GET', loc, true);  // true - 비동기
+		 xhr.send();
+		 
+	 });
+	 
+	 
+ }
+</script>
+</head>
+<body>
+ <h2>Ajax 비동기</h2>
+   <button id="btnGetData">Get Data</button>
+   <div id="div1"></div>
+</body>
+</html>
